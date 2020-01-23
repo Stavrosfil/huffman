@@ -1,14 +1,15 @@
 
 class Node:
 
-    def __init__(self, value=None, left_child=None, right_child=None):
+    def __init__(self, value=None, freq=0, left_child=None, right_child=None):
         super().__init__()
         self.value = value
+        self.freq = freq
         self.left_child = left_child
         self.right_child = right_child
 
     def __gt__(self, other):
-        return self.value > other.value
+        return self.freq > other.freq
 
 
 to_encode = input()
@@ -23,24 +24,23 @@ for c in to_encode:
     else:
         chars[c] = 1
 
-sorted_c = sorted((value, Node(value=key)) for (key, value) in chars.items())
-print([n[1].value for n in sorted_c])
+sorted_n = sorted(Node(value=char, freq=freq) for (char, freq) in chars.items())
 
-root = None
 while True:
-    if len(sorted_c) == 1:
-        root = sorted_c.pop()[1]
+
+    # If the procedure is done, only one node will be left inside the list
+    # This will be the root node of the tree
+    if len(sorted_n) == 1:
         break
-    first, second = sorted_c.pop(0), sorted_c.pop(0)
-    temp_node = Node(left_child=first[1], right_child=second[1])
-    sorted_c.append((first[0] + second[0], temp_node))
-    sorted_c.sort()
 
-print(root)
+    # Extract the first two nodes, containing the least possible values.
+    first, second = sorted_n.pop(0), sorted_n.pop(0)
+    # Create a temporary node containing the two selected nodes as children
+    temp_node = Node(left_child=first, right_child=second, freq=(first.freq + second.freq))
+    # Add the temporary node back to our (now unsorted) list
+    sorted_n.append(temp_node)
+    # Sort the list again
+    sorted_n.sort()
 
 
-# sorted_c.append((0, 'd'))
-# sorted_c.sort()
-# print(sorted_c)
-
-# for i in range(len(sorted_c)):
+print(sorted)
