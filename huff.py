@@ -33,10 +33,19 @@ def main():
         # Sort the list again
         sorted_n.sort()
 
-    print(sorted_n)
     code = {}
     generate_huffman_code(sorted_n.pop(), code, '')
     print(code)
+    print(encode(to_encode, code))
+
+
+def encode(msg, code):
+    encoded = ''
+    for c in msg:
+        encoded += code[c]
+
+    return(encoded)
+    # return(''.join([code[c] for c in msg]))
 
 
 def generate_huffman_code(root, ans, code):
