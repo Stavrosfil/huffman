@@ -1,9 +1,13 @@
 import Node as Node
+import matplotlib
+import matplotlib.pyplot as plt
+import numpy as np
 
 
 def main():
 
     to_encode = input()
+    char_freq = None
 
     # bstr = bytes('az', 'utf-8')
     # chars = {chr(c): 0 for c in range(bstr[0], bstr[1])}
@@ -37,6 +41,37 @@ def main():
     generate_huffman_code(sorted_n.pop(), code, '')
     print(code)
     print(encode(to_encode, code))
+    plot(code, chars)
+
+
+def plot(code, chars):
+    x = np.arange(len(code))  # the label locations
+    width = 0.35  # the width of the bars
+    fig, ax = plt.subplots()
+
+    total = 0
+    for char in chars:
+        total += chars[char]
+    for char in chars:
+        chars[char] /= total
+
+    labels = code.keys()
+    char_encoded_len = [len(v) for v in code.values()]
+    char_freq = [chars[c] for c in labels]
+
+    ax.set_title('Distribution of encoded character length after Huffman code')
+
+    rects1 = ax.bar(x - width/2, char_encoded_len, width, label='Huffman code length')
+    rects2 = ax.bar(x + width / 2, char_freq, width, label='Original distribution')
+
+    # Add some text for labels, title and custom x-axis tick labels, etc.
+    ax.set_ylabel('Frequency')
+    ax.set_xlabel('Char')
+    ax.set_xticks(x)
+    ax.set_xticklabels(labels)
+    ax.legend()
+
+    plt.show()
 
 
 def encode(msg, code):
