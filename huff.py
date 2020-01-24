@@ -34,10 +34,18 @@ def main():
         sorted_n.sort()
 
     print(sorted_n)
+    code = {}
+    generate_huffman_code(sorted_n.pop(), code, '')
+    print(code)
 
 
-def inorder():
-    pass
+def generate_huffman_code(root, ans, code):
+
+    if root.value is not None:
+        ans[root.value] = code
+    else:
+        generate_huffman_code(root.left_child, ans, code + '0')
+        generate_huffman_code(root.right_child, ans, code + '1')
 
 
 if __name__ == "__main__":
