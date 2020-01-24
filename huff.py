@@ -49,20 +49,23 @@ def plot(code, chars):
     width = 0.35  # the width of the bars
     fig, ax = plt.subplots()
 
-    total = 0
+    total1 = 0
+    total2 = 0
     for char in chars:
-        total += chars[char]
+        total1 += chars[char]
+        total2 = max(total2, len(code[char]))
     for char in chars:
-        chars[char] /= total
+        chars[char] /= total1
+        code[char] = len(code[char]) / total2
 
     labels = code.keys()
-    char_encoded_len = [len(v) for v in code.values()]
     char_freq = [chars[c] for c in labels]
+    char_encoded_len = [v for v in code.values()]
 
     ax.set_title('Distribution of encoded character length after Huffman code')
 
-    rects1 = ax.bar(x - width/2, char_encoded_len, width, label='Huffman code length')
-    rects2 = ax.bar(x + width / 2, char_freq, width, label='Original distribution')
+    rects1 = ax.bar(x - width / 2, char_freq, width, label='Original distribution')
+    rects2 = ax.bar(x + width / 2, char_encoded_len, width, label='Huffman code length')
 
     # Add some text for labels, title and custom x-axis tick labels, etc.
     ax.set_ylabel('Frequency')
