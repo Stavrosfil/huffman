@@ -50,15 +50,8 @@ def plot(code, chars):
     x = np.arange(len(chars))
     # The width of the bars
     width = 0.35
-    fig, ax = plt.subplots()
-
-    # The ranges of the two dictionaries, for plot normalization
-    # TODO: oneline with list unpacking
-    range1 = 0
-    range2 = 0
-    for char in chars:
-        range1 = max(range1, chars[char])
-        range2 = max(range2, len(code[char]))
+    fig, ax1 = plt.subplots()
+    ax2 = ax1.twinx()
 
     # Sort character frequency dictionary based on values rather than keys
     chars = {k: v for k, v in sorted(chars.items(), key=lambda item: item[1])}
@@ -66,22 +59,23 @@ def plot(code, chars):
     # Labels for the bars
     labels = [l for l in chars]
 
-    # Create normalized character count and encoded character length lists
-    char_freq = [chars[c] / range1 for c in labels]
-    char_encoded_len = [len(code[c]) / range2 for c in labels]
+    # Create character count and encoded character length lists
+    char_freq = [chars[c] for c in labels]
+    char_encoded_len = [len(code[c]) for c in labels]
 
     # The two bars in the plot
-    rects1 = ax.bar(x - width / 2, char_freq, width, label='Original distribution', color='salmon')
-    rects2 = ax.bar(x + width / 2, char_encoded_len, width, label='Huffman code length', color='lightseagreen')
+    rects1 = ax1.bar(x - width / 2, char_freq, width, label='Original distribution', color='salmon')
+    rects2 = ax2.bar(x + width / 2, char_encoded_len, width, label='Huffman code length', color='lightseagreen')
 
-    # Add some text for labels, title and custom x-axis tick labels, etc.
-    ax.set_title('Distribution of original and encoded character length after Huffman code')
-    ax.set_ylabel('Frequency')
-    ax.set_xlabel('Char')
-    ax.set_xticks(x)
-    ax.set_xticklabels(labels)
-    ax.legend()
+    # Add some text for labels, title and custom x-ax1is tick labels, etc.
+    ax1.set_title('Distribution of original and encoded character length after Huffman code')
+    ax1.set_ylabel('Encoded Length', color='lightseagreen')
+    ax2.set_ylabel('Frequency', color='salmon')
+    ax1.set_xlabel('Character')
+    ax1.set_xticks(x)
+    ax1.set_xticklabels(labels)
 
+    fig.legend()
     plt.show()
 
 
