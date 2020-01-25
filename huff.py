@@ -50,11 +50,12 @@ def plot(code, chars):
     x = np.arange(len(chars))
     # The width of the bars
     width = 0.35
+
     fig, ax1 = plt.subplots()
     ax2 = ax1.twinx()
 
     # Sort character frequency dictionary based on values rather than keys
-    chars = {k: v for k, v in sorted(chars.items(), key=lambda item: item[1])}
+    chars = {k: v for k, v in sorted(chars.items(), key=lambda item: -item[1])}
 
     # Labels for the bars
     labels = [l for l in chars]
@@ -64,13 +65,16 @@ def plot(code, chars):
     char_encoded_len = [len(code[c]) for c in labels]
 
     # The two bars in the plot
+    # Original character count
     rects1 = ax1.bar(x - width / 2, char_freq, width, label='Original distribution', color='salmon')
+    ax1.set_ylabel('Frequency', color='salmon')
+
+    # Huffman encoded count
     rects2 = ax2.bar(x + width / 2, char_encoded_len, width, label='Huffman code length', color='lightseagreen')
+    ax2.set_ylabel('Encoded Length', color='lightseagreen')
 
     # Add some text for labels, title and custom x-ax1is tick labels, etc.
     ax1.set_title('Distribution of original and encoded character length after Huffman code')
-    ax1.set_ylabel('Encoded Length', color='lightseagreen')
-    ax2.set_ylabel('Frequency', color='salmon')
     ax1.set_xlabel('Character')
     ax1.set_xticks(x)
     ax1.set_xticklabels(labels)
