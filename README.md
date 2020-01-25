@@ -1,6 +1,6 @@
 # Huffman encoding
 
-A simple, yet efficient python script for huffman encoding and decoding, with emfasis on visualization and speed.
+A simple, yet efficient python script for huffman encoding and decoding, with emphasis on visualization and speed.
 
 <p align="center">
   <img src="./Figure_1.png"/>
