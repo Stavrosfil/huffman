@@ -39,35 +39,43 @@ def main():
 
     code = {}
     generate_huffman_code(sorted_n.pop(), code, '')
-    print(code)
-    print(encode(to_encode, code))
+    # print(code)
+    # print(encode(to_encode, code))
     plot(code, chars)
 
 
 def plot(code, chars):
-    x = np.arange(len(code))  # the label locations
-    width = 0.35  # the width of the bars
+
+    # The label locations
+    x = np.arange(len(chars))
+    # The width of the bars
+    width = 0.35
     fig, ax = plt.subplots()
 
-    total1 = 0
-    total2 = 0
+    # The ranges of the two dictionaries, for plot normalization
+    # TODO: oneline with list unpacking
+    range1 = 0
+    range2 = 0
     for char in chars:
-        total1 += chars[char]
-        total2 = max(total2, len(code[char]))
-    for char in chars:
-        chars[char] /= total1
-        code[char] = len(code[char]) / total2
+        range1 = max(range1, chars[char])
+        range2 = max(range2, len(code[char]))
 
-    labels = code.keys()
-    char_freq = [chars[c] for c in labels]
-    char_encoded_len = [v for v in code.values()]
+    # Sort character frequency dictionary based on values rather than keys
+    chars = {k: v for k, v in sorted(chars.items(), key=lambda item: item[1])}
 
-    ax.set_title('Distribution of encoded character length after Huffman code')
+    # Labels for the bars
+    labels = [l for l in chars]
 
-    rects1 = ax.bar(x - width / 2, char_freq, width, label='Original distribution')
-    rects2 = ax.bar(x + width / 2, char_encoded_len, width, label='Huffman code length')
+    # Create normalized character count and encoded character length lists
+    char_freq = [chars[c] / range1 for c in labels]
+    char_encoded_len = [len(code[c]) / range2 for c in labels]
+
+    # The two bars in the plot
+    rects1 = ax.bar(x - width / 2, char_freq, width, label='Original distribution', color='salmon')
+    rects2 = ax.bar(x + width / 2, char_encoded_len, width, label='Huffman code length', color='lightseagreen')
 
     # Add some text for labels, title and custom x-axis tick labels, etc.
+    ax.set_title('Distribution of original and encoded character length after Huffman code')
     ax.set_ylabel('Frequency')
     ax.set_xlabel('Char')
     ax.set_xticks(x)
